@@ -11,6 +11,9 @@ import cn.knowei.seckill.vo.LoginVo;
 import cn.knowei.seckill.vo.RespBean;
 import cn.knowei.seckill.vo.RespBeanEnum;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public RespBean doLogin(LoginVo login, HttpServletRequest request, HttpServletResponse response) {
@@ -54,8 +60,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         //生成cookie
         String ticket = UUIDUtil.uuid();
-        request.getSession().setAttribute(ticket, user);
+        //redis存入
+        redisTemplate.opsForValue().set("user:" + ticket, user);
+//        request.getSession().setAttribute(ticket, user);
         CookieUtil.setCookie(request, response, "userTicket", ticket);
         return RespBean.success();
+    }
+
+    @Override
+    public User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response) {
+        if(StringUtils.isEmpty(userTicket)){
+            return null;
+        }
+        User user = (User)redisTemplate.opsForValue().get("user:" + userTicket);
+        if(user != null){
+            // 更新cookie
+            CookieUtil.setCookie(request, response, "userTicket", userTicket);
+        }
+        return user;
     }
 }
