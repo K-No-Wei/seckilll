@@ -22,7 +22,11 @@ public enum RespBeanEnum {
     LOGINVO_ERROR(500211,"用户名或者密码错误"),
     MOBILE_ERROR(500212,"手机号码格式错误"),
     //
-    BIND_ERROR(500212, "参数校验异常")
+    BIND_ERROR(500212, "参数校验异常"),
+
+    EMPTY_STOCK(500500, "库存不足"),
+
+    REPEATE_ERROR(500501, "该商品每人只限购买一次"),
     ;
     private final Integer code;
     private final String message;

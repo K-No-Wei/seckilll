@@ -3,6 +3,7 @@ package cn.knowei.seckill.service.impl;
 import cn.knowei.seckill.exception.GlobalException;
 import cn.knowei.seckill.mapper.UserMapper;
 import cn.knowei.seckill.pojo.User;
+import cn.knowei.seckill.service.GoodsService;
 import cn.knowei.seckill.service.UserService;
 import cn.knowei.seckill.utils.CookieUtil;
 import cn.knowei.seckill.utils.MD5Utils;
