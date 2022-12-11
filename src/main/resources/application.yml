@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/seckilll?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    hikari:
+      pool-name: DateHikariCP
+      minimum-idle: 5
+      idle-timeout: 18000
+      auto-commit: true
+      max-lifetime: 18000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+#mybatis-plus??
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-prefix: tb_
+  type-aliases-package: cn.knowei.seckill.pojo
+logging:
+  level:
+    cn.knowei.seckill.mapper: debug
